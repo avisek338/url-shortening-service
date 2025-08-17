@@ -1,0 +1,40 @@
+require('dotenv').config();
+
+class Base62Encoding {
+    constructor() {
+        // Base62 character set: 0-9, A-Z, a-z (total 62 characters)
+        this.chars = process.env.ENCODING_SECRET;
+        this.base = 62;
+    }
+    
+    encode(num) { 
+        if (num === 0) return this.chars[0];
+        
+        let result = '';
+        while (num > 0) {
+            const remainder = num % this.base;
+            result = this.chars[remainder] + result;
+            num = Math.floor(num / this.base);
+        }
+        return result.padStart(7, "0");
+    }
+    
+    decode(str) {
+        let result = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            const charIndex = this.chars.indexOf(char);
+            if (charIndex === -1) {
+                throw new Error(`Invalid Base62 character: ${char}`);
+            }
+            result = result * this.base + charIndex;
+        }
+        return result;
+    }
+    
+    generateShortCode(counter) {
+        return this.encode(counter);
+    }
+}
+
+module.exports = Base62Encoding;
