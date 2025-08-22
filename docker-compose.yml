@@ -8,10 +8,10 @@ services:
       - "8080:8080"
     environment:
       PORT: 8080
-      MONGO_URI: mongodb+srv://avisek338:avisek123@cluster0.wzynilg.mongodb.net/URL_SHORTNER?retryWrites=true&w=majority&appName=Cluster0
+      MONGO_URI: 
       BASE_URL: localhost:8080
-      REDIS_PASSWORD: LrhPWu4hX2Gi3XGbVEb4nXTiPOZXYYB2
-      ENCODING_SECRET: 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+      REDIS_PASSWORD: 
+      ENCODING_SECRET: 
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
