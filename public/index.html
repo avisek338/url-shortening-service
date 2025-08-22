@@ -1,88 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <title>URL Shortener - Quick & Easy</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
         body {
-            background: #000000;
-            color: #ffffff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            width: 100vw;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url('./images/pexels-pixelcop-2680270.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .main-container {
+            padding: 50px 15px;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .logo-section p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
         }
 
         .card {
-            background-color: #1c1c1c;
-            color: #ffffff;
-            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 55px rgba(0, 0, 0, 0.2);
         }
 
         .card-header {
-            border-bottom: 1px solid #333333;
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px 20px 0 0 !important;
+            padding: 30px;
         }
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
+        .card-header h2 {
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+            font-size: 1.8rem;
         }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-group label {
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 10px;
         }
 
         .form-control {
-            background-color: #333333;
+            background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
-            border: 1px solid #555555;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            color: #ffffff;
         }
 
         .form-control::placeholder {
-            color: #aaaaaa;
+            color: rgba(255, 255, 255, 0.6);
         }
 
-        a {
-            color: #007bff;
+        .btn-primary {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
         }
 
-        a:hover {
-            color: #0056b3;
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .short-url-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.5s ease;
+            width: 100%;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-section {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .result-section h5 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .url-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid rgba(79, 172, 254, 0.3);
         }
 
         #short-url {
-            color: rgb(0, 0, 255);
+            color: #4facfe;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            word-break: break-all;
+            display: block;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        #short-url:hover {
+            color: #00f2fe;
+            text-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #4facfe;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .features {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .feature-item {
+            display: inline-block;
+            margin: 0 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .feature-item i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #4facfe;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Ensure full width coverage */
+        .container-fluid {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 30px 15px;
+            }
+
+            .logo-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .card-header, .card-body, .result-section {
+                padding: 20px;
+            }
+            
+            .feature-item {
+                display: block;
+                margin: 15px 0;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                min-width: auto;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Fallback for browsers that don't support backdrop-filter */
+        @supports not (backdrop-filter: blur(20px)) {
+            .card, .short-url-card {
+                background: rgba(28, 28, 28, 0.9);
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="content-wrapper">
+                
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <h1><i class="fas fa-link"></i> LinkMini</h1>
+                    <p>Transform your long URLs into short, shareable links instantly</p>
+                </div>
+
+                <!-- Main Card -->
                 <div class="card">
                     <div class="card-header text-center">
-                        <h2>URL Shortener</h2>
+                        <h2><i class="fas fa-scissors"></i> URL Shortener</h2>
                     </div>
                     <div class="card-body">
                         <form id="shorten-url-form">
                             <div class="form-group">
-                                <label for="long-url">Enter your long URL</label>
-                                <input type="url" class="form-control" id="long-url" placeholder="https://example.com"
-                                    required>
+                                <label for="long-url">
+                                    <i class="fas fa-globe"></i> Enter your long URL
+                                </label>
+                                <input type="url" class="form-control" id="long-url" 
+                                       placeholder="https://example.com/very/long/url/that/needs/shortening"
+                                       required>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Shorten URL</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-magic"></i> Shorten URL
+                            </button>
                         </form>
+                        
+                        <!-- Loading State -->
+                        <div class="loading" id="loading">
+                            <div class="spinner"></div>
+                            <p style="color: #ffffff; margin: 0;">Creating your short URL...</p>
+                        </div>
                     </div>
                 </div>
-                <div class="card mt-3" id="short-url-card" style="display: none;">
-                    <div class="card-body text-center">
-                        <h5>Your shortened URL:</h5>
-                        <p id="short-url" target="_blank"></p>
-                        
+
+                <!-- Result Card -->
+                <div class="card mt-4 short-url-card" id="short-url-card" style="display: none;">
+                    <div class="result-section">
+                        <h5><i class="fas fa-check-circle"></i> Your shortened URL is ready!</h5>
+                        <div class="url-container">
+                            <a id="short-url" href="#" target="_blank"></a>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary" id="copy-btn">
+                                <i class="fas fa-copy"></i> Copy Link
+                            </button>
+                            <button class="btn btn-secondary" id="qr-btn">
+                                <i class="fas fa-qrcode"></i> QR Code
+                            </button>
+                            <button class="btn btn-secondary" id="new-url-btn">
+                                <i class="fas fa-plus"></i> New URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Lightning Fast</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure & Reliable</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mobile Friendly</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Toast for notifications -->
+    <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="3000">
+        <div class="toast-body">
+            <i class="fas fa-check-circle"></i> <span id="toast-message">URL copied to clipboard!</span>
         </div>
     </div>
 
@@ -91,10 +437,16 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-
         document.getElementById('shorten-url-form').addEventListener('submit', async function (event) {
             event.preventDefault();
             const longUrl = document.getElementById('long-url').value;
+            const loadingDiv = document.getElementById('loading');
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            loadingDiv.style.display = 'block';
 
             const request = new Request("/", {
                 method: "POST",
@@ -116,11 +468,68 @@
                 document.getElementById('short-url').href = shortUrl;
                 document.getElementById('short-url').textContent = shortUrl;
                 document.getElementById('short-url-card').style.display = 'block';
+                
+                // Smooth scroll to result
+                document.getElementById('short-url-card').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
+                showToast('Error creating short URL. Please try again.', 'error');
+            } finally {
+                // Hide loading state
+                loadingDiv.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-magic"></i> Shorten URL';
             }
         });
 
+        // Copy to clipboard functionality
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const shortUrl = document.getElementById('short-url').textContent;
+            navigator.clipboard.writeText(shortUrl).then(function() {
+                showToast('URL copied to clipboard!', 'success');
+            }).catch(function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shortUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('URL copied to clipboard!', 'success');
+            });
+        });
+
+        // QR Code functionality
+        document.getElementById('qr-btn').addEventListener('click', function() {
+            const shortUrl = document.getElementById('short-url').textContent;
+            window.open(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shortUrl)}`, '_blank');
+        });
+
+        // New URL functionality
+        document.getElementById('new-url-btn').addEventListener('click', function() {
+            document.getElementById('short-url-card').style.display = 'none';
+            document.getElementById('long-url').value = '';
+            document.getElementById('long-url').focus();
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.innerHTML = type === 'success' 
+                ? `<i class="fas fa-check-circle"></i> ${message}`
+                : `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            
+            $(toast).toast('show');
+        }
+
+        // Auto-focus on URL input
+        document.getElementById('long-url').focus();
     </script>
 </body>
 

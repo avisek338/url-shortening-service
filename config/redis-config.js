@@ -5,8 +5,8 @@ const client = createClient({
     username: 'default',
     password: process.env.REDIS_PASSWORD,
     socket: {
-        host: 'redis-19930.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
-        port: 19930
+        host: process.env.REDIS_HOST || 'redis', // use docker service name
+        port: process.env.REDIS_PORT || 6379
     }
 });
 
